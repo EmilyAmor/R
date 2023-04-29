@@ -1,6 +1,6 @@
-# ANOVA and Multiple Regression - Chapter 10 Discovering Statisitcs, Andy Field 
+ANOVA and Multiple Regression - Chapter 10 Discovering Statisitcs, Andy Field
 #
-setwd("~/OneDrive/MIDS/W203/Data/anova")
+setwd("~/Documents/university_surrey_training/R")
 
 # use the downloaded dummy.dat file
 dummy <- read.delim("dummy.dat", header=TRUE)
@@ -8,7 +8,7 @@ head(dummy)
 summary(dummy)
 ls.str()
 
-# looking at the dummy data, there is a vector for libido, and vectors for dummy1 and dummy2 that 
+# looking at the dummy data, there is a vector for libido, and vectors for dummy1 and dummy2 that
 # appear to be coded 0,1 for the dummy variable. There's also a vector for dose that ranges from 1-3
 # but is supposed to represent "placebo", "low dose", "high dose", so we need to recode as a factor
 dummy$dose<-factor(dummy$dose, levels = c(1:3), labels = c("Placebo", "Low Dose", "High Dose"))
@@ -26,7 +26,7 @@ dummy.1 <- lm(libido ~ dummy1 + dummy2, data = dummy)
 summary(dummy.1)
 
 # We see from the output that F(2, 12) is significant at p < .05
-# Therefor using the group means is a better model than using the overall mean 
+# Therefor using the group means is a better model than using the overall mean
 # We also see that beta(1) is significant at p < .05 but beta(2) is not (p=.282)
 
 # --------------------- The Logic of ANOVA ---------------------- #
@@ -52,7 +52,7 @@ summary(dummy.1)
 # ---------------------------------------------------------------#
 #
 # Calculate the total variation of the data (sum of squares)
-# 
+#
 
 gsd <- sd(dummy$libido)
 sst <- (gsd^2)*(length(dummy$libido)-1)
@@ -65,13 +65,13 @@ high <- dummy[dummy$dummy1 == 1 & dummy$dummy2 == 0, ]
 low <- dummy[dummy$dummy1 ==0 & dummy$dummy2 == 1, ]
 
 m.grand <- mean(dummy$libido)
-m.low <- mean(low$libido) 
+m.low <- mean(low$libido)
 m.high <- mean(high$libido)
 m.placebo <- mean(placebo$libido)
 
 ssm <- length(placebo$libido)*(m.placebo - m.grand)^2 + length(low$libido)*(m.low - m.grand)^2 + length(high$libido)*(m.high - m.grand)^2
 
-# The variance explained by the model is ssm = 20.1333, so out of 43.733 variance of the data, the model explains 20.1333 
+# The variance explained by the model is ssm = 20.1333, so out of 43.733 variance of the data, the model explains 20.1333
 
 # We can calculate the residuals as the variance not explained by the model, which is the sum of group variances and degrees of freedom
 
@@ -92,9 +92,9 @@ msm <- ssm/(3 - 1)
 
 msr <- ssr/(14 - 2)
 
-# The F-ratio is msm/msr 
+# The F-ratio is msm/msr
 
-fr <- msm/msr 
+fr <- msm/msr
 
 # which gives 5.1184, and compare to the F-ratio computed as part of the linear regression of 5.119
 
